@@ -1,12 +1,17 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/material'
+import { Box } from '@mui/system'
 import type { InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
+import { useState } from 'react'
 
+import AddCampaignDialog from '@/components/AddCampaignDialog'
 import Layout from '@/components/Layout'
 import campaignFactory from '@/interfaces/campaignFactory'
 
+const fetchCampaigns = (): Promise<string[]> => campaignFactory.methods.getDeployedCampaigns().call()
+
 export const getServerSideProps = async () => {
-  const activeCampaigns: string[] = await campaignFactory.methods.getDeployedCampaigns().call()
+  const activeCampaigns = await fetchCampaigns()
   return {
     props: {
       activeCampaigns
@@ -15,6 +20,8 @@ export const getServerSideProps = async () => {
 }
 
 const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [activeCampaigns, setActiveCampaigns] = useState(props.activeCampaigns)
+  const handleCampaignCreated = async () => setActiveCampaigns(await fetchCampaigns())
   return (
     <Layout>
       <Head>
@@ -25,28 +32,24 @@ const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => 
       <Grid container spacing={3} padding={3}>
         <Grid item xs={8}>
           <Typography gutterBottom variant="h6">Open campaigns</Typography>
-          {props.activeCampaigns.map((campaignAddress, index) => (
-            <Card key={campaignAddress}>
-              <CardContent>
-                <Typography variant="h5" component="h2">
+          {activeCampaigns.map((campaignAddress, index) => (
+            <Box key={campaignAddress} marginBottom={3}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" component="h2">
                   Campaign {index + 1}
-                </Typography>
-                <Typography variant="body1">At address {campaignAddress}</Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">View Campaign</Button>
-              </CardActions>
-            </Card>
+                  </Typography>
+                  <Typography variant="body1">At address {campaignAddress}</Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small">View Campaign</Button>
+                </CardActions>
+              </Card>
+            </Box>
           ))}
         </Grid>
-        <Grid
-          item
-          xs={4}
-          mt={5}
-        >
-          <Button variant="contained" color="secondary" fullWidth>
-            Create new campaign
-          </Button>
+        <Grid item xs={4} mt={5} >
+          <AddCampaignDialog onCampaignCreated={handleCampaignCreated} />
         </Grid>
       </Grid>
     </Layout>

@@ -1,6 +1,6 @@
+import fs from 'fs'
 import path from 'path'
 import solc from 'solc'
-import fs from 'fs'
 
 const buildPath = path.resolve(__dirname, 'build')
 fs.rmSync(buildPath, { recursive: true, force: true })
@@ -12,9 +12,9 @@ const output = solc.compile<':Campaign' | ':CampaignFactory'>(source, 1).contrac
 fs.mkdirSync(buildPath)
 
 for (const contract in output) {
-    const contractName = contract as keyof typeof output
-    fs.writeFileSync(
-        path.resolve(buildPath, contractName.replace(':', '') + '.json'),
-        JSON.stringify(output[contractName], null, 4)
-    )
+  const contractName = contract as keyof typeof output
+  fs.writeFileSync(
+    path.resolve(buildPath, `${contractName.replace(':', '')}.json`),
+    JSON.stringify(output[contractName], null, 4)
+  )
 }
