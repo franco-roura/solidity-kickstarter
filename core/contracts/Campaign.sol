@@ -1,14 +1,15 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.5.1;
+pragma experimental ABIEncoderV2;
 
 contract CampaignFactory {
     address[] public deployedCampaigns;
 
     function createCampaign(uint256 minimum) public {
-        address newCampaign = new Campaign(minimum, msg.sender);
-        deployedCampaigns.push(newCampaign);
+        Campaign newCampaign = new Campaign(minimum, msg.sender);
+        deployedCampaigns.push(address(newCampaign));
     }
 
-    function getDeployedCampaigns() public view returns (address[]) {
+    function getDeployedCampaigns() public view returns (address[] memory) {
         return deployedCampaigns;
     }
 }
@@ -17,10 +18,18 @@ contract Campaign {
     struct Request {
         string description;
         uint256 value;
-        address recipient;
+        address payable recipient;
         bool complete;
         uint256 approvalCount;
         mapping(address => bool) approvals;
+    }
+
+    struct Summary {
+      uint256 minimumContribution;
+      uint256 contractBalance;
+      uint256 requestsCount;
+      uint256 approversCount;
+      address manager;
     }
 
     Request[] public requests;
@@ -34,7 +43,7 @@ contract Campaign {
         _;
     }
 
-    function Campaign(uint256 minimum, address creator) public {
+    constructor(uint256 minimum, address creator) public {
         manager = creator;
         minimumContribution = minimum;
     }
@@ -49,9 +58,9 @@ contract Campaign {
     }
 
     function createRequest(
-        string description,
+        string memory description,
         uint256 value,
-        address recipient
+        address payable recipient
     ) public managerOnly {
         Request memory newRequest = Request({
             description: description,
@@ -81,5 +90,16 @@ contract Campaign {
 
         request.recipient.transfer(request.value);
         request.complete = true;
+    }
+
+    function getCampaignSummary() public view returns (Summary memory) {
+      Summary memory summary = Summary({
+        minimumContribution: minimumContribution,
+        contractBalance: address(this).balance,
+        requestsCount: requests.length,
+        approversCount: approversCount,
+        manager: manager
+      });
+      return summary;
     }
 }

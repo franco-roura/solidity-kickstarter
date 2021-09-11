@@ -1,7 +1,20 @@
-import { ProviderMessage, ProviderRpcError, ProviderConnectInfo, RequestArguments } from 'hardhat/types'
-import { Contract } from 'types/web3-eth-contract'
+import { ProviderConnectInfo, ProviderMessage, ProviderRpcError, RequestArguments } from 'hardhat/types'
+
+import { Contract } from '@/types/web3-eth-contract'
+
 export type FactoryContract = Contract<'createCampaign' | 'getDeployedCampaigns'>
-export type CampaignContract = Contract<'contribute' | 'createRequest' | 'approveRequest' | 'finalizeRequest' | 'requests' | 'manager' | 'minimumContribution' | 'approversCount' | 'approvers'>
+export type CampaignContract = Contract<
+  'contribute' |
+  'createRequest' |
+  'approveRequest' |
+  'finalizeRequest' |
+  'requests' |
+  'manager' |
+  'minimumContribution' |
+  'approversCount' |
+  'approvers' |
+  'getCampaignSummary'
+>
 
 export interface EthereumEvent {
     connect: ProviderConnectInfo;

@@ -1,3 +1,3 @@
 declare module 'ganache-cli' {
-    export function provider(): import('web3-core').provider
+    export function provider(arg0: Options): import('web3-core').provider
 }

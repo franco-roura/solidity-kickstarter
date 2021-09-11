@@ -1,11 +1,11 @@
-import CampaignFactory from 'core/build/CampaignFactory.json'
-import web3 from 'interfaces/web3'
-import type { FactoryContract } from 'types/app-env'
+import type { AbiItem } from 'web3-utils'
 
-console.log(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS)
+import CampaignFactory from '@/core/build/contracts/CampaignFactory.json'
+import web3 from '@/interfaces/web3'
+import type { FactoryContract } from '@/types/app-env'
 
 const campaignFactory = new web3.eth.Contract(
-  JSON.parse(CampaignFactory.interface),
+  CampaignFactory.abi as AbiItem[],
   process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 ) as unknown as FactoryContract
 

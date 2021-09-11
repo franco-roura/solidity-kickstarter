@@ -18,11 +18,11 @@
  */
 
 import BN = require('bn.js');
-import { Common, PromiEvent, hardfork, chain, BlockNumber, PastLogsOptions, LogsOptions } from 'web3-core'
+import { BlockNumber, chain, Common, hardfork, LogsOptions, PastLogsOptions, PromiEvent } from 'web3-core'
 import { AbiItem } from 'web3-utils'
 
 export class Contract<T> {
-    constructor(
+  constructor(
         jsonInterface: AbiItem[],
         address?: string,
         options?: ContractOptions

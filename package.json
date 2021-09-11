@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "version": "auto-changelog -p && git add CHANGELOG.md",
-    "test": "ts-mocha -p tsconfig.json -r tsconfig-paths/register test/**/*.test.ts",
+    "test": "ts-mocha -p tsconfig.json -r tsconfig-paths/register **/*.test.ts",
     "build-contracts": "tsnd -r tsconfig-paths/register core/compile.ts",
     "deploy-contracts": "tsnd -r tsconfig-paths/register -r dotenv/config core/deploy.ts"
   },
