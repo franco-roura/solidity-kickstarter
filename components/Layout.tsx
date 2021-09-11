@@ -1,20 +1,24 @@
-import MenuIcon from '@mui/icons-material/Menu'
+import HomeIcon from '@mui/icons-material/Home'
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
+import Link from 'next/link'
 
 const Layout: React.FC = (props) => {
   return (
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Link href="/" passHref>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+
+            >
+              <HomeIcon />
+            </IconButton>
+          </Link>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Ethereum Kickstarter
           </Typography>
