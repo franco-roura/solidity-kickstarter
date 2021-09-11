@@ -1,4 +1,4 @@
-import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, Snackbar, TextField } from '@mui/material'
+import { Alert, AlertColor, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, Snackbar, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import * as yup from 'yup'
@@ -17,13 +17,12 @@ interface Props {
 const AddCampaignDialog = (props: Props) => {
   const [openDialog, setOpenDialog] = useState(false)
   const [openSnackbar, setOpenSnackbar] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [feedbackMessage, setFeedbackMessage] = useState('Your campaign has been created!')
-  const [feedbackType, setFeedbackType] = useState<'error' | 'success'>('success')
+  const [feedbackType, setFeedbackType] = useState<AlertColor>('success')
   const handleOpenDialog = () => setOpenDialog(true)
   const handleCloseSnackbar = () => setOpenSnackbar(false)
   const handleCloseDialog = () => {
-    if (!loading) setOpenDialog(false)
+    if (!formik.isSubmitting) setOpenDialog(false)
   }
 
   const formik = useFormik({
@@ -33,7 +32,7 @@ const AddCampaignDialog = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        setLoading(true)
+        // setSubmitting(true)
         const [account] = await web3.eth.getAccounts()
         await campaignFactory.methods.createCampaign(values.minimumContribution).send({
           from: account
@@ -47,7 +46,7 @@ const AddCampaignDialog = (props: Props) => {
         setFeedbackType('error')
       } finally {
         setOpenSnackbar(true)
-        setLoading(false)
+        // setSubmitting(false)
       }
     },
   })
@@ -79,7 +78,7 @@ const AddCampaignDialog = (props: Props) => {
             />
           </DialogContent>
           <DialogActions>
-            {loading
+            {formik.isSubmitting
               ? <CircularProgress />
               : (
                 <>

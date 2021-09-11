@@ -4,8 +4,10 @@ import Head from 'next/head'
 import React from 'react'
 
 import CampaignDetailCard from '@/components/CampaignDetailCard'
+import ContributeForm from '@/components/ContributeForm'
 import Layout from '@/components/Layout'
 import Campaign from '@/interfaces/campaign'
+import web3 from '@/interfaces/web3'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const campaignAddress = context.params?.address as string
@@ -30,7 +32,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 }
 
 const CampaignPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log(props)
   return (
     <Layout>
       <Head>
@@ -39,39 +40,40 @@ const CampaignPage = (props: InferGetServerSidePropsType<typeof getServerSidePro
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Grid container spacing={3} padding={3}>
-        <Grid item container xs={8} spacing={3}>
+        <Grid item container xs={12} sm={8} spacing={3}>
           <Grid item xs={12}>
-            <Typography variant="h6" component="h1">
+            <Typography variant="h6" component="h1" noWrap>
               Campaign {props.campaignAddress}
             </Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <CampaignDetailCard title="Address of the manager" value={props.manager}>
               The manager created this campaign and can create requests to withdraw money.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sm={6}>
             <CampaignDetailCard title="Minimum contribution" value={props.minimumContribution}>
               You must contribute at least this much WEI in order to become a &quot;Request Approver&quot;.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sm={6}>
             <CampaignDetailCard title="Number of requests" value={props.requestsCount}>
               A request tries to withdraw money from the contract. Requests must be approved by &quot;Request Approvers&quot;.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sm={6}>
             <CampaignDetailCard title="Number of approvers" value={props.approversCount}>
               Number of people who have already donated to this campaign.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6}>
-            <CampaignDetailCard title="Campaign balance (ETH)" value={props.contractBalance}>
+          <Grid item xs={6} sm={6}>
+            <CampaignDetailCard title="Campaign balance (ETH)" value={web3.utils.fromWei(props.contractBalance, 'ether')}>
               The balance is the current amount of ETH this campaign can spend.
             </CampaignDetailCard>
           </Grid>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={4}>
+          <ContributeForm campaignAddress={props.campaignAddress} />
         </Grid>
       </Grid>
     </Layout >
