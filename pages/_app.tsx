@@ -1,8 +1,7 @@
-import type { AppProps } from 'next/app'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { blue } from '@mui/material/colors'
 import { pink } from '@mui/material/colors'
-
+import { createTheme,ThemeProvider } from '@mui/material/styles'
+import type { AppProps } from 'next/app'
 
 const theme = createTheme({
   palette: {
@@ -14,7 +13,6 @@ const theme = createTheme({
     },
   },
 })
-
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
