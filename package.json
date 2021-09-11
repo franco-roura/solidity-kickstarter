@@ -1,12 +1,13 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "version": "auto-changelog -p && git add CHANGELOG.md",
     "test": "ts-mocha -p tsconfig.json -r tsconfig-paths/register test/**/*.test.ts",
     "build-contracts": "tsnd -r tsconfig-paths/register core/compile.ts",
     "deploy-contracts": "tsnd -r tsconfig-paths/register -r dotenv/config core/deploy.ts"
@@ -36,6 +37,7 @@
     "@types/react": "17.0.19",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
+    "auto-changelog": "^2.3.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "ts-mocha": "^8.0.0",
