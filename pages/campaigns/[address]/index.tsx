@@ -41,39 +41,40 @@ const CampaignPage = (props: InferGetServerSidePropsType<typeof getServerSidePro
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Grid container spacing={3} padding={3}>
-        <Grid item container xs={12} sm={8} spacing={3}>
+        <Grid item container xs={12} md={8} spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h6" component="h1" noWrap>
               Campaign {props.campaignAddress}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} md={6}>
             <CampaignDetailCard title="Address of the manager" value={props.manager}>
               The manager created this campaign and can create requests to withdraw money.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6} sm={6}>
+          <Grid item xs={6} md={6}>
             <CampaignDetailCard title="Minimum contribution" value={props.minimumContribution}>
               You must contribute at least this much WEI in order to become a &quot;Request Approver&quot;.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6} sm={6}>
+          <Grid item xs={6} md={6}>
             <CampaignDetailCard title="Number of requests" value={props.requestsCount}>
-              A request tries to withdraw money from the contract. Requests must be approved by &quot;Request Approvers&quot;.
+              A request tries to withdraw money from the contract.
+              Requests must be approved by at least 50% of the &quot;Request Approvers&quot; of this campaign in order to succeed.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6} sm={6}>
+          <Grid item xs={6} md={6}>
             <CampaignDetailCard title="Number of approvers" value={props.approversCount}>
               Number of people who have already donated to this campaign.
             </CampaignDetailCard>
           </Grid>
-          <Grid item xs={6} sm={6}>
+          <Grid item xs={6} md={6}>
             <CampaignDetailCard title="Campaign balance (ETH)" value={web3.utils.fromWei(props.contractBalance, 'ether')}>
               The balance is the current amount of ETH this campaign can spend.
             </CampaignDetailCard>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} md={4}>
           <ContributeForm campaignAddress={props.campaignAddress} />
           <Divider sx={{ marginX: 3 }} />
           <Box padding={2}>

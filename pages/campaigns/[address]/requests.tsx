@@ -35,7 +35,7 @@ const CampaignRequests = (props: InferGetServerSidePropsType<typeof getServerSid
           <Typography variant="h5">
             {request.description}
           </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" noWrap>
             To provider {request.recipient}
           </Typography>
         </Grid>
@@ -77,17 +77,15 @@ const CampaignRequests = (props: InferGetServerSidePropsType<typeof getServerSid
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Grid container spacing={3} padding={3}>
-        <Grid item container xs={12} sm={8} spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h6" component="h1" noWrap>
-              Requests of campaign {props.campaignAddress}
-            </Typography>
-          </Grid>
-          <Grid item xs={10}>
-            {renderRequests()}
-          </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" component="h1" noWrap>
+            Requests of campaign {props.campaignAddress}
+          </Typography>
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} lg={8} spacing={3}>
+          {renderRequests()}
+        </Grid>
+        <Grid item xs={12} lg={4}>
           <AddRequestDialog campaignAddress={props.campaignAddress} />
         </Grid>
       </Grid>
