@@ -1,6 +1,7 @@
 import HomeIcon from '@mui/icons-material/Home'
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
 import Link from 'next/link'
+import React from 'react'
 
 const Layout: React.FC = (props) => {
   return (
@@ -28,9 +29,6 @@ const Layout: React.FC = (props) => {
       <main>
         {props.children}
       </main>
-
-      <footer>
-      </footer>
     </>
   )
 }

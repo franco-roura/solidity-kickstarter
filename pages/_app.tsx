@@ -1,24 +1,38 @@
-import { blue } from '@mui/material/colors'
-import { pink } from '@mui/material/colors'
+import createCache from '@emotion/cache'
+import { CacheProvider, EmotionCache } from '@emotion/react'
+import CssBaseline from '@mui/material/CssBaseline'
 import { createTheme,ThemeProvider } from '@mui/material/styles'
 import type { AppProps } from 'next/app'
+import React from 'react'
 
 const theme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
-      main: blue[500],
+      main: '#FDD835',
     },
-    secondary: {
-      main: pink[500],
-    },
+    background: {
+      default: '#37474F',
+      paper: '#212121'
+    }
   },
-})
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+})
+const clientSideEmotionCache = createCache({ key: 'css' })
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+function MyApp(props: MyAppProps): JSX.Element {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   return (
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <CacheProvider value={emotionCache}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </CacheProvider>
+
   )
 }
 export default MyApp

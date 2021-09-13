@@ -1,6 +1,7 @@
-import { Grid, Typography } from '@mui/material'
+import { Box, Button, Divider, Grid, Typography } from '@mui/material'
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import React from 'react'
 
 import CampaignDetailCard from '@/components/CampaignDetailCard'
@@ -74,6 +75,12 @@ const CampaignPage = (props: InferGetServerSidePropsType<typeof getServerSidePro
         </Grid>
         <Grid item xs={12} sm={4}>
           <ContributeForm campaignAddress={props.campaignAddress} />
+          <Divider sx={{ marginX: 3 }} />
+          <Box padding={2}>
+            <Link href={`/campaigns/${props.campaignAddress}/requests`} passHref>
+              <Button fullWidth>View requests</Button>
+            </Link>
+          </Box>
         </Grid>
       </Grid>
     </Layout >

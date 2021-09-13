@@ -1,4 +1,4 @@
-import { Alert, AlertColor, Button, CircularProgress, DialogActions, DialogContent, DialogContentText, DialogTitle, InputAdornment, Snackbar, TextField } from '@mui/material'
+import { Alert, AlertColor, Box, Button, CircularProgress, InputAdornment, Snackbar, TextField, Typography } from '@mui/material'
 import { useFormik } from 'formik'
 import Router from 'next/router'
 import React, { useMemo, useState } from 'react'
@@ -40,7 +40,7 @@ const ContributeForm = (props: Props) => {
         })
         setFeedbackMessage('Your contribution has been sent!')
         setFeedbackType('success')
-        setTimeout(() => Router.reload())
+        setTimeout(() => Router.reload(), 300)
       } catch (error: any) {
         setFeedbackMessage(error.message ?? 'Something went wrong')
         setFeedbackType('error')
@@ -52,11 +52,11 @@ const ContributeForm = (props: Props) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <DialogTitle>Add a contribution</DialogTitle>
-      <DialogContent>
-        <DialogContentText marginBottom={2}>
+      <Typography variant="h6" paddingX={3} paddingBottom={3}>Add a contribution</Typography>
+      <Box paddingX={3}>
+        <Typography variant="body1" marginBottom={2}>
           Select an amount to contribute to this campaign.
-        </DialogContentText>
+        </Typography>
         <TextField
           autoFocus
           name="contributionAmount"
@@ -70,13 +70,13 @@ const ContributeForm = (props: Props) => {
           helperText={formik.touched.contributionAmount && formik.errors.contributionAmount}
           fullWidth
         />
-      </DialogContent>
-      <DialogActions>
+      </Box>
+      <Box padding={3} display="flex" justifyContent="flex-end">
         {formik.isSubmitting
           ? <CircularProgress />
-          : <Button type="submit" color="primary">Create!</Button>
+          : <Button fullWidth variant="contained">Contribute!</Button> //<Button type="submit" color="primary">Contribute!</Button>
         }
-      </DialogActions>
+      </Box>
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity={feedbackType}>
           {feedbackMessage}
