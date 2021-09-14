@@ -66,6 +66,15 @@ export type FormikObj<T extends StringHashmap> = {
   getFieldProps: (nameOrOptions: any) => FieldInputProps<any>
 }
 
+export interface Request {
+  id: number
+  description: string
+  valueInEth: string
+  recipient: string
+  complete: string
+  approvalCount: number
+}
+
 declare global {
     interface Window {
         ethereum: Ethereumish;

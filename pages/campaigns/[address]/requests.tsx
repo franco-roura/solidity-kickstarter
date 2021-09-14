@@ -1,72 +1,46 @@
-import { mdiEthereum } from '@mdi/js'
-import Icon from '@mdi/react'
-import { Grid, Paper, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
-import React from 'react'
 
 import AddRequestDialog from '@/components/AddRequestDialog'
 import Layout from '@/components/Layout'
+import RequestCard from '@/components/RequestCard'
 import Campaign from '@/interfaces/campaign'
 import web3 from '@/interfaces/web3'
+import { Request } from '@/types/app-env'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const campaignAddress = context.params?.address as string
   const campaign = Campaign(campaignAddress)
   const requestCount = await campaign.methods.getRequestsCount().call()
-  const requests = await Promise.all(Array.from(Array(parseInt(requestCount)).keys()).map(async (index) => {
+  const neededApprovals = await campaign.methods.approversCount().call()
+  const campaignManager = await campaign.methods.manager().call()
+  const requests: Array<Request> = []
+  await Promise.all(Array.from(Array(parseInt(requestCount)).keys()).map(async (index) => {
     const { description, value, recipient, complete, approvalCount } = await campaign.methods.requests(index).call()
     const valueInEth = web3.utils.fromWei(value, 'ether')
-    return { description, valueInEth, recipient, complete, approvalCount }
+    if (!complete) requests.push({ id: index, description, valueInEth, recipient, complete, approvalCount })
   }))
   return {
     props: {
       campaignAddress,
-      requests
+      requests,
+      neededApprovals,
+      campaignManager
     }
   }
 }
 
 const CampaignRequests = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const renderRequests = () => props.requests.map((request, index) => (
-    <Paper key={index} sx={{ padding: 3, width: '100%', flexGrow: 1, marginBottom: 3 }} elevation={3}>
-      <Grid container>
-        <Grid item xs={7}>
-          <Typography variant="h5">
-            {request.description}
-          </Typography>
-          <Typography variant="body2" noWrap>
-            To provider {request.recipient}
-          </Typography>
-        </Grid>
-        <Grid item xs={2} alignSelf="center">
-          <Typography
-            variant="h5"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              justifyContent: 'flex-end'
-            }}>
-            {request.valueInEth} ETH
-            <Icon path={mdiEthereum} title="ETH" size={1.16} />
-          </Typography>
-        </Grid>
-        <Grid item xs={3} alignSelf="center">
-          <Typography
-            variant="h5"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              justifyContent: 'flex-end'
-            }}>
-            {request.valueInEth} ETH
-            <Icon path={mdiEthereum} title="ETH" size={1.16} />
-          </Typography>
-        </Grid>
-      </Grid>
-    </Paper>
+
+  const renderRequests = () => props.requests.map((request) => (
+    <RequestCard
+      key={request.id}
+      campaignAddress={props.campaignAddress}
+      campaignManager={props.campaignManager}
+      neededApprovals={props.neededApprovals}
+      request={request}
+    />
   ))
   console.table(props.requests)
   return (
@@ -82,7 +56,7 @@ const CampaignRequests = (props: InferGetServerSidePropsType<typeof getServerSid
             Requests of campaign {props.campaignAddress}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} spacing={3}>
+        <Grid item xs={12} lg={8}>
           {renderRequests()}
         </Grid>
         <Grid item xs={12} lg={4}>

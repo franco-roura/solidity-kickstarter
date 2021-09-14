@@ -74,7 +74,7 @@ const ContributeForm = (props: Props) => {
       <Box padding={3} display="flex" justifyContent="flex-end">
         {formik.isSubmitting
           ? <CircularProgress />
-          : <Button fullWidth variant="contained">Contribute!</Button> //<Button type="submit" color="primary">Contribute!</Button>
+          : <Button fullWidth type="submit" variant="contained">Contribute!</Button>
         }
       </Box>
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>

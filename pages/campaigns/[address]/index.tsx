@@ -13,13 +13,14 @@ import web3 from '@/interfaces/web3'
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const campaignAddress = context.params?.address as string
   const campaign = Campaign(campaignAddress)
-  const [
+  const {
     minimumContribution,
     contractBalance,
     requestsCount,
     approversCount,
     manager,
-  ] = await campaign.methods.getCampaignSummary().call()
+  } = await campaign.methods.getCampaignSummary().call()
+
   return {
     props: {
       campaignAddress,
