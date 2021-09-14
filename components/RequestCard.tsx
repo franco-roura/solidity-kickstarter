@@ -1,5 +1,4 @@
-import { mdiEthereum } from '@mdi/js'
-import { mdiAccountMultipleCheck } from '@mdi/js'
+import { mdiAccountMultipleCheck, mdiCheckCircle, mdiEthereum } from '@mdi/js'
 import Icon from '@mdi/react'
 import { LoadingButton } from '@mui/lab'
 import { Box, Grid, Paper, Typography } from '@mui/material'
@@ -57,23 +56,30 @@ const RequestCard = (props: Props) => {
     }
   }
   return (
-    <Paper key={props.request.id} sx={{ padding: 3, width: '100%', flexGrow: 1, marginBottom: 3 }} elevation={3}>
+    <Paper
+      key={props.request.id}
+      sx={{ padding: 3, width: '100%', flexGrow: 1, marginBottom: 3, opacity: props.request.complete ? 0.6 : 1 }}
+      elevation={3}
+    >
       <Grid container>
         <Grid item xs={7}>
           <Typography variant="h5">
             {props.request.description}
+            {props.request.complete && <Icon path={mdiCheckCircle} color="#FDD835" title="ETH" size={1} />}
           </Typography>
           <Typography variant="body2" noWrap>
             To provider {props.request.recipient}
           </Typography>
-          <Box marginTop={1}>
-            {userIsManager && (
-              <LoadingButton loading={loadingFinalize} onClick={handleFinalizeRequest} disabled={!approved} sx={{ marginRight: 1 }} variant="outlined">
+          {!props.request.complete && (
+            <Box marginTop={1}>
+              {userIsManager && (
+                <LoadingButton loading={loadingFinalize} onClick={handleFinalizeRequest} disabled={!approved} sx={{ marginRight: 1 }} variant="outlined">
                 Finalize
-              </LoadingButton>
-            )}
-            <LoadingButton loading={loadingApproval} onClick={handleApproveRequest} variant="outlined">Approve</LoadingButton>
-          </Box>
+                </LoadingButton>
+              )}
+              <LoadingButton loading={loadingApproval} onClick={handleApproveRequest} variant="outlined">Approve</LoadingButton>
+            </Box>
+          )}
         </Grid>
         <Grid item xs={2} alignSelf="center">
           <Typography

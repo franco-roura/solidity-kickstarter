@@ -7,7 +7,6 @@ import Layout from '@/components/Layout'
 import RequestCard from '@/components/RequestCard'
 import Campaign from '@/interfaces/campaign'
 import web3 from '@/interfaces/web3'
-import { Request } from '@/types/app-env'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const campaignAddress = context.params?.address as string
@@ -15,11 +14,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const requestCount = await campaign.methods.getRequestsCount().call()
   const neededApprovals = await campaign.methods.approversCount().call()
   const campaignManager = await campaign.methods.manager().call()
-  const requests: Array<Request> = []
-  await Promise.all(Array.from(Array(parseInt(requestCount)).keys()).map(async (index) => {
+  const requests = await Promise.all(Array.from(Array(parseInt(requestCount)).keys()).map(async (index) => {
     const { description, value, recipient, complete, approvalCount } = await campaign.methods.requests(index).call()
     const valueInEth = web3.utils.fromWei(value, 'ether')
-    if (!complete) requests.push({ id: index, description, valueInEth, recipient, complete, approvalCount })
+    return { id: index, description, valueInEth, recipient, complete, approvalCount }
   }))
   return {
     props: {
